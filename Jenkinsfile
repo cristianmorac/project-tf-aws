@@ -12,6 +12,7 @@ pipeline {
     stages {
         stage('checkout'){
             steps {
+                /* Toma el repositorio configurado y la rama */
                 checkout scm
             }
         }
@@ -27,9 +28,22 @@ pipeline {
 
             }
         }
-        stage('build'){
+        stage('build Apply/destroy'){
             steps {
-                echo 'Building...'
+                script {
+                    if (params.action == 'apply'){
+                        if (!params.AutoApprove){
+                            def plan = ReadFile 'tfplan.txt'
+                            input message: 'Do you want to apply the plan?'
+                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                        }
+                         sh 'terraform ${action} -input=false tfplan'
+                    } else if (param.action == 'destroy'){
+                        sh 'terraform ${action} --auto-approve'
+                    } else {
+                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
+                    }
+                }
             }
         }
         stage('deploy'){
