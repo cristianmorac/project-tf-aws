@@ -1,12 +1,14 @@
 pipeline {
     agent any
     paramaters {
-        booleanParam(name:'AutoApprove', defaultValue: true, description: 'Auto approve the deployment')
+        booleanParam(name:'AutoApprove', defaultValue: false, description: 'Auto approve the deployment')
         choice(name:'action', choices:['apply','destroy'], description:'select action')
     }
+
     environment {
         AWS_REGION = 'us-east-1'
-        }
+    }
+
     stages {
         stage('init'){
             steps {
