@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    paramaters {
+    parameters {
         booleanParam(name:'AutoApprove', defaultValue: false, description: 'Auto approve the deployment')
         choice(name:'action', choices:['apply','destroy'], description:'select action')
     }
