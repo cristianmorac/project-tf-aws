@@ -17,7 +17,9 @@ pipeline {
         }
         stage('test'){
             steps {
-                echo 'Running tests...'
+                sh 'terraform plan -out=tfplan'
+                sh 'terraform show -no-color tfplan > tfplan.txt'
+
             }
         }
         stage('build'){
